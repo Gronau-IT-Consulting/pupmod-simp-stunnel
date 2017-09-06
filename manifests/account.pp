@@ -52,6 +52,8 @@ define stunnel::account (
     }
   }
 
-  ensure_resources('user', $_user)
-  ensure_resources('group', $_group)
+  if $facts['os']['name'] in ['RedHat','CentOS'] {
+    ensure_resources('user', $_user)
+    ensure_resources('group', $_group)
+  }
 }

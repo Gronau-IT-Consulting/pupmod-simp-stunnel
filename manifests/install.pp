@@ -16,13 +16,20 @@ class stunnel::install (
 ){
   assert_private()
 
-  package { 'stunnel': ensure => $version }
+  if $facts['os']['name'] in ['RedHat','CentOS'] {
+    $_package = 'stunnel'
+  }
+  elsif $facts['os']['name'] in ['Debian','Ubuntu'] {
+   $_package = 'stunnel4'
+  }
+
+  package { $_package: ensure => $version }
 
   file { '/etc/stunnel':
     ensure  => 'directory',
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    require =>  Package['stunnel']
+    require =>  Package[$_package]
   }
 }

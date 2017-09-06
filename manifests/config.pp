@@ -132,7 +132,12 @@ class stunnel::config (
   Boolean                        $fips                    = $::stunnel::fips
 ) inherits stunnel {
 
-  if $facts['selinux_current_mode'] and $facts['selinux_current_mode'] != 'disabled' {
+ if $facts['os']['name'] in ['Debian','Ubuntu'] {
+    warning("No chroot support yet for Debian/Ubuntu in stunnel::config")
+    notify { "No chroot support yet for Debian/Ubuntu in stunnel::config": }
+    $_chroot = undef
+  }
+  elsif $facts['selinux_current_mode'] and $facts['selinux_current_mode'] != 'disabled' {
     $_chroot = undef
   }
   else {
